@@ -9,8 +9,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-
   <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  {% block extra_css %}{% endblock %}
   {% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -43,8 +43,8 @@
     </nav>
 
     <div class="sidebar-footer">
-        <span class="user-name">{{ user.get_full_name|default:user.username }}</span>
-        <a href="{% url 'login' %}">Logout</a>
+        <span class="user_name">👋{{ user.get_full_name|default:user.username }}</span>
+        <a href="{% url 'login' %}" class="logout-btn">Logout</a>
     </div>
   </aside>
 
@@ -58,12 +58,14 @@
     </header>
 
     {% if messages %}
-      <div class="messages">
+    <div class="messages-container">
         {% for message in messages %}
-          <div class="message {{ message.tags }}">{{ message }}</div>
+            <div class="alert alert-{{ message.tags }} auto-dismiss">
+                {{ message }}
+            </div>
         {% endfor %}
-      </div>
-    {% endif %}
+    </div>
+  {% endif %}
 
     <main class="content">
       {% block content %}{% endblock %}

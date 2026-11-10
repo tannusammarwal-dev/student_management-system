@@ -11,6 +11,7 @@ from .forms import  RegisterForm , LoginForm
 # Create your views here.
 
  # Authentication
+
 def register_user(request): 
     if request.user.is_authenticated:
         return redirect('dashboard')
@@ -54,7 +55,7 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     messages.success(request,"you have been logged out")
-    return render(request,"login.html")
+    return redirect('login')
 
 
 # dashboard 

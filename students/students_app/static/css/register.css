@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Manrope:wght@400;500;600;700&display=swap');
 
 /* ==============================
@@ -5,23 +6,23 @@
 ============================== */
 
 :root {
-    --ink: #0a0f1a;
-    --surface: #111827;
-    --surface-raised: #162033;
-    --line: #243049;
-    --line-strong: #3a4a6b;
+    --ink: #F5F3FF;
+    --surface: #FFFFFF;
+    --surface-raised: #FAF8FF;
+    --line: #DDD6FE;
+    --line-strong: #C4B5FD;
 
-    --text: #eef2fa;
-    --text-muted: #94a3bd;
-    --text-faint: #66748f;
+    --text: #2E1065;
+    --text-muted: #7C6F9B;
+    --text-faint: #A78BCA;
 
-    --accent: #9b8cff;
-    --accent-hover: #b3a8ff;
-    --accent-ink: #0a0f1a;
+    --accent: #7C3AED;
+    --accent-hover: #6D28D9;
+    --accent-ink: #FFFFFF;
 
-    --danger: #ff9b9b;
-    --danger-bg: rgba(255, 107, 107, 0.08);
-    --danger-line: rgba(255, 107, 107, 0.35);
+    --danger: #DC2626;
+    --danger-bg: #FEF2F2;
+    --danger-line: #FECACA;
 
     --font-display: 'Bricolage Grotesque', 'Manrope', sans-serif;
     --font-body: 'Manrope', 'Inter', system-ui, sans-serif;
@@ -47,18 +48,41 @@ body {
     padding: 24px;
     position: relative;
     overflow: hidden;
-    background: var(--ink);
+
+    background: linear-gradient(
+        135deg,
+        #F5F3FF 0%,
+        #EDE9FE 50%,
+        #FAF8FF 100%
+    );
 }
 
-/* Faint dot grid that fades out toward the edges */
+/* Soft dot pattern */
+
 .auth-container::before {
     content: "";
     position: absolute;
     inset: 0;
-    background-image: radial-gradient(rgba(155, 140, 255, 0.22) 1px, transparent 1px);
+
+    background-image: radial-gradient(
+        rgba(124, 58, 237, 0.13) 1px,
+        transparent 1px
+    );
+
     background-size: 28px 28px;
-    -webkit-mask-image: radial-gradient(ellipse at center, #000 0%, transparent 70%);
-            mask-image: radial-gradient(ellipse at center, #000 0%, transparent 70%);
+
+    -webkit-mask-image: radial-gradient(
+        ellipse at center,
+        #000 0%,
+        transparent 70%
+    );
+
+    mask-image: radial-gradient(
+        ellipse at center,
+        #000 0%,
+        transparent 70%
+    );
+
     pointer-events: none;
 }
 
@@ -73,28 +97,38 @@ body {
     padding: 40px 36px 34px;
 
     background: var(--surface);
-    border: 1px solid var(--line);
+    border: 1px solid #E9E2FA;
     border-radius: 20px;
-    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+
+    box-shadow: 0 25px 60px rgba(76, 29, 149, 0.10);
 
     animation: card-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 
-/* Accent edge: the one distinctive detail */
+/* Accent edge */
+
 .auth-card::before {
     content: "";
     position: absolute;
     top: -1px;
     left: 36px;
     right: 36px;
-    height: 2px;
+    height: 3px;
+
     border-radius: 0 0 2px 2px;
     background: var(--accent);
 }
 
 @keyframes card-in {
-    from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: none; }
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
 }
 
 /* ==============================
@@ -104,30 +138,37 @@ body {
 .auth-logo {
     display: grid;
     place-items: center;
+
     width: 48px;
     height: 48px;
     margin-bottom: 22px;
 
-    background: var(--accent);
-    color: var(--accent-ink);
+    background: #EDE9FE;
+    color: #7C3AED;
+
     border-radius: 14px;
     font-size: 20px;
 }
 
 .auth-card h1 {
     margin: 0 0 8px;
+
     font-family: var(--font-display);
     font-size: 30px;
     font-weight: 800;
+
     letter-spacing: -0.02em;
     line-height: 1.15;
+
     color: var(--text);
 }
 
 .auth-subtitle {
     margin: 0 0 30px;
+
     font-size: 14px;
     line-height: 1.55;
+
     color: var(--text-muted);
 }
 
@@ -142,8 +183,10 @@ body {
 .form-group label {
     display: block;
     margin-bottom: 8px;
+
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 700;
+
     color: var(--text);
 }
 
@@ -151,14 +194,18 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
+
     padding: 0 16px;
     height: 50px;
 
-    background: var(--ink);
+    background: #FAF8FF;
     border: 1px solid var(--line);
     border-radius: 12px;
 
-    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
 }
 
 .input-box:hover {
@@ -166,15 +213,18 @@ body {
 }
 
 .input-box:focus-within {
-    background: var(--surface-raised);
+    background: #FFFFFF;
     border-color: var(--accent);
-    box-shadow: 0 0 0 4px rgba(155, 140, 255, 0.16);
+
+    box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.12);
 }
 
 .input-box i {
     flex-shrink: 0;
+
     font-size: 15px;
     color: var(--text-faint);
+
     transition: color 0.2s ease;
 }
 
@@ -198,32 +248,41 @@ body {
 }
 
 .input-box input::placeholder {
-    color: var(--text-faint);
+    color: #A78BCA;
     font-size: 14px;
 }
 
-/* Stop the browser's yellow/white autofill background */
+/* Browser autofill background */
+
 .input-box input:-webkit-autofill,
 .input-box input:-webkit-autofill:focus {
     -webkit-text-fill-color: var(--text);
     caret-color: var(--text);
+
     transition: background-color 9999s ease-in-out 0s;
-    box-shadow: 0 0 0 100px var(--surface-raised) inset;
+
+    box-shadow: 0 0 0 100px #FAF8FF inset;
 }
 
 /* Show / hide password */
+
 .toggle-password {
     padding: 6px;
     margin-right: -6px;
+
     border-radius: 8px;
+
     color: var(--text-faint);
     cursor: pointer;
-    transition: color 0.2s ease, background 0.2s ease;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease;
 }
 
 .toggle-password:hover {
     color: var(--accent);
-    background: rgba(155, 140, 255, 0.1);
+    background: #EDE9FE;
 }
 
 /* ==============================
@@ -235,25 +294,34 @@ body {
     align-items: center;
     justify-content: center;
     gap: 10px;
+
     width: 100%;
     height: 50px;
     margin-top: 8px;
 
     background: var(--accent);
     color: var(--accent-ink);
+
     border: none;
     border-radius: 12px;
 
     font-family: inherit;
     font-size: 15px;
     font-weight: 700;
+
     cursor: pointer;
 
-    transition: background 0.2s ease, transform 0.15s ease;
+    box-shadow: 0 5px 14px rgba(124, 58, 237, 0.18);
+
+    transition:
+        background 0.2s ease,
+        transform 0.15s ease,
+        box-shadow 0.2s ease;
 }
 
 .auth-btn:hover {
     background: var(--accent-hover);
+    box-shadow: 0 7px 18px rgba(124, 58, 237, 0.25);
 }
 
 .auth-btn:active {
@@ -267,10 +335,12 @@ body {
 .auth-footer {
     margin-top: 26px;
     padding-top: 22px;
+
     border-top: 1px solid var(--line);
 
     text-align: center;
     font-size: 14px;
+
     color: var(--text-muted);
 }
 
@@ -296,6 +366,7 @@ body {
 
     background: var(--danger-bg);
     color: var(--danger);
+
     border: 1px solid var(--danger-line);
     border-left-width: 3px;
     border-radius: 10px;
@@ -311,6 +382,7 @@ body {
 
     font-size: 12.5px;
     font-weight: 500;
+
     color: var(--danger);
 }
 
@@ -326,8 +398,13 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .auth-card { animation: none; }
-    * { transition-duration: 0.01ms !important; }
+    .auth-card {
+        animation: none;
+    }
+
+    * {
+        transition-duration: 0.01ms !important;
+    }
 }
 
 /* ==============================
