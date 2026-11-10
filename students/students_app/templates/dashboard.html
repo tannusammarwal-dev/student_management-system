@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block heading %}Dashboard{% endblock %}
+{% block content %}
+{% load static %}
+<div class="stats-grid">
+  <div class="stat-card"><div class="stat-icon">👨‍🎓</div><div><h3>{{ total_students }}</h3><p>Total Students</p></div></div>
+  <div class="stat-card"><div class="stat-icon">✅</div><div><h3>{{ active_students }}</h3><p>Active Students</p></div></div>
+  <div class="stat-card"><div class="stat-icon">📚</div><div><h3>{{ total_courses }}</h3><p>Courses</p></div></div>
+  <div class="stat-card"><div class="stat-icon">⭐</div><div><h3>{% if average_score is not None %}{{ average_score|floatformat:1 }}%{% else %}--{% endif %}</h3><p>Average Score</p></div></div>
+</div>
+
+<div class="two-col">
+  <div class="card">
+    <div class="card-head"><h2>Recently Added Students</h2><a class="btn btn-sm" >+ Add Student</a></div>
+    {% if recent_students %}
+    <div class="table-wrap"><table>
+      <thead><tr><th>Roll</th><th>Name</th><th>Course</th><th>Status</th></tr></thead>
+      <tbody>
+      {% for s in recent_students %}
+        <tr>
+          <td>{{ s.roll_number }}</td>
+          <td><a href="{{ s.get_absolute_url }}">{{ s.full_name }}</a></td>
+          <td>{{ s.course.name|default:"Unassigned" }}</td>
+          <td>{% if s.is_active %}<span class="badge badge-green">Active</span>{% else %}<span class="badge badge-gray">Inactive</span>{% endif %}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table></div>
+    {% else %}
+    <div class="empty"><span class="big">🎓</span>No students yet. <a >Add your first student</a>.</div>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <div class="card-head"><h2>Students per Course</h2><a class="btn btn-light btn-sm" >Manage</a></div>
+    {% for c in course_stats %}
+      <div class="bar-row">
+        <div class="label"><span>{{ c.name }}</span><strong>{{ c.student_count }}</strong></div>
+        <div class="bar"><span></span></div>
+      </div>
+    {% empty %}
+      <div class="empty"><span class="big">📚</span>No courses yet. <a>Add a course</a>.</div>
+    {% endfor %}
+    {% if unassigned %}<p style="color:var(--muted);margin-top:10px">{{ unassigned }} student{{ unassigned|pluralize }} not assigned to a course.</p>{% endif %}
+  </div>
+</div>
+{% endblock %}
