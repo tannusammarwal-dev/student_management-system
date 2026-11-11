@@ -1,12 +1,17 @@
 from django.db.models.aggregates import Avg
+from django.http import request
 from django.shortcuts import render, redirect , get_object_or_404
 from django.contrib.auth import logout,login as auth_login
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+from django.urls import reverse
 from .models import Course, Student, Mark
-from django.db.models import Count
-from .forms import  RegisterForm , LoginForm    
+from .forms import  RegisterForm , LoginForm, StudentForm, StudentForm  
+from django.core.paginator import Paginator
+from django.db.models import Avg, Count, Q  
+
 
 # Create your views here.
 
@@ -86,23 +91,86 @@ def dashboard(request):
 
 # Student Management
 def students_list(request):
-    return render(request,"students/students_list.html")
+    q = request.GET.get('q', '').strip()
+    course_id = request.GET.get('course', '').strip()
+    status = request.GET.get('status', '').strip()
+
+    students = Student.objects.filter(owner=request.user).select_related('course')
+    if q:
+        students = students.filter(
+            Q(first_name__icontains=q) | Q(last_name__icontains=q) |
+            Q(roll_number__icontains=q) | Q(email__icontains=q))
+    if course_id.isdigit():
+        students = students.filter(course_id=int(course_id))
+    if status == 'active':
+        students = students.filter(is_active=True)
+    elif status == 'inactive':
+        students = students.filter(is_active=False)
+
+    page_obj = Paginator(students, 8).get_page(request.GET.get('page'))
+    params = request.GET.copy()
+    params.pop('page', None)
+
+    return render(request, 'student_list.html', {
+        'page_obj': page_obj,
+        'courses': Course.objects.filter(owner=request.user),
+        'q': q, 'course_id': course_id, 'status': status,
+        'querystring': params.urlencode(),
+    })
+    
 
 def students_create(request):
-    return render(request,"students/students_create.html")
+    form = StudentForm(request.POST or None, user=request.user)
+    if request.method == 'POST' and form.is_valid():
+        student = form.save(commit=False)
+        student.owner = request.user
+        student.save()
+        messages.success(request, f'Student "{student.full_name}" added.')
+        return redirect('student_detail', pk=student.pk)
+    return render(request, 'student_form.html', {'form': form, 'title': 'Add Student'})
 
-def students_details(request, pk):
-    return render(request,"students/students_details.html")
+def student_details(request, pk):
+     student = get_object_or_404(
+        Student,
+        pk=pk,
+        owner=request.user)
+
+     return render(request, "student_details.html", {'student': student})
+
+    
 
 def students_edit(request, pk):
-    return render(request,"students/students_edit.html")
+    student = get_object_or_404(Student, pk=pk, owner=request.user)
+    form = StudentForm(request.POST or None, instance=student, user=request.user)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, f'Student "{student.full_name}" updated.')
+        return redirect('student_detail', pk=student.pk)
+    return render(request, 'student_form.html', {'form': form, 'title': 'Edit Student'})
 
 def students_delete(request, pk):
-    return render(request,"students/students_delete.html")
+    student = get_object_or_404(Student, pk=pk, owner=request.user)
+    if request.method == 'POST':
+        name = student.full_name
+        student.delete()
+        messages.success(request, f'Student "{name}" deleted.')
+        return redirect('students_list')
+    return render(request, 'confirm_delete.html', {
+        'object_name': student.full_name, 'kind': 'student',
+        'cancel_url': reverse('student_detail', args=[student.pk]),
+        'warning': 'All marks of this student will also be deleted.',
+    })
+
 
 # course
 def courses_list(request):
-    return render(request,"courses/courses_list.html")      
+    q = request.GET.get('q', '').strip()
+    courses = Course.objects.filter(owner=request.user).annotate(student_count=Count('students'))
+    if q:
+        courses = courses.filter(Q(name__icontains=q) | Q(code__icontains=q))
+    return render(request, 'course_list.html', {'courses': courses, 'q': q})
+     
+         
 
 def courses_create(request):
     return render(request,"courses/courses_create.html")

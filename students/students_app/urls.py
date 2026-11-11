@@ -13,7 +13,7 @@ urlpatterns = [
    # Student Management
    path("students",views.students_list,name='students_list'),
    path("students/add",views.students_create,name='students_create'),
-   path("students/<int:pk>",views.students_details,name='students_details'),
+   path("students/<int:pk>",views.student_details,name='student_detail'),
    path("students/<int:pk>/edit",views.students_edit,name='students_edit'),
    path("students/<int:pk>/delete",views.students_delete,name='students_delete'),
 

@@ -60,6 +60,12 @@ class StudentForm(forms.ModelForm):
         fields = ['roll_number','first_name','last_name','email','phone', 'gender','date_of_birth','course','admission_date','address', 'is_active'
         ]
 
+        widgets = {
+            'date_of_birth': forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'}),
+            'admission_date': forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'}),
+            'address': forms.Textarea(attrs={'rows': 3}),
+        }
+
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.user = user

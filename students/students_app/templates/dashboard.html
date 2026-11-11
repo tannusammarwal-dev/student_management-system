@@ -69,7 +69,7 @@
                     <p class="card-subtitle">Latest student records</p>
                 </div>
 
-                <a href="#" class="btn btn-sm">+ Add Student</a>
+                <a href="{% url 'students_create' %}" class="btn btn-sm">+ Add Student</a>
             </div>
 
             {% if recent_students %}
@@ -121,7 +121,7 @@
                 <span class="empty-icon">🎓</span>
                 <h3>No students yet</h3>
                 <p>Start by adding your first student.</p>
-                <a href="#" class="empty-link">Add your first student</a>
+                <a href="{% url 'students_create' %}" class="empty-link">Add your first student</a>
             </div>
 
             {% endif %}

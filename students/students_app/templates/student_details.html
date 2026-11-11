@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}{{ student.full_name }}{% endblock %}
+{% block heading %}Student Profile{% endblock %}
+{% block content %}
+<div class="card">
+  <div class="profile-head">
+    <div class="avatar">{{ student.initials }}</div>
+    <div>
+      <h2 style="margin:0">{{ student.full_name }}</h2>
+      <p style="color:var(--muted)">Roll No: {{ student.roll_number }}
+        {% if student.is_active %}<span class="badge badge-green">Active</span>{% else %}<span class="badge badge-gray">Inactive</span>{% endif %}</p>
+    </div>
+    <div class="actions" style="margin-left:auto">
+      <a class="btn btn-light" href="{% url 'students_edit' student.pk %}">Edit</a>
+      <a class="btn btn-danger" href="{% url 'students_delete' student.pk %}">Delete</a>
+    </div>
+  </div>
+  <div class="detail-grid">
+    <div class="detail-item"><small>Email</small><strong>{{ student.email }}</strong></div>
+    <div class="detail-item"><small>Phone</small><strong>{{ student.phone|default:"--" }}</strong></div>
+    <div class="detail-item"><small>Gender</small><strong>{{ student.get_gender_display }}</strong></div>
+    <div class="detail-item"><small>Date of Birth</small><strong>{{ student.date_of_birth|date:"d M Y"|default:"--" }}</strong></div>
+    <div class="detail-item"><small>Course</small><strong>{{ student.course.name|default:"Unassigned" }}</strong></div>
+    <div class="detail-item"><small>Admission Date</small><strong>{{ student.admission_date|date:"d M Y" }}</strong></div>
+    <div class="detail-item"><small>Address</small><strong>{{ student.address|default:"--" }}</strong></div>
+    <div class="detail-item"><small>Average Score</small><strong>{% if average is not None %}{{ average|floatformat:1 }}%{% else %}--{% endif %}</strong></div>
+  </div>
+</div>
+
+<div class="two-col">
+  <div class="card">
+    <h2>Marks</h2>
+    {% if marks %}
+    <div class="table-wrap"><table>
+      <thead><tr><th>Subject</th><th>Score</th><th>Grade</th><th>Date</th><th></th></tr></thead>
+      <tbody>
+      {% for m in marks %}
+        <tr>
+          <td>{{ m.subject }}</td><td>{{ m.score }}/100</td>
+          <td><span class="badge {% if m.grade == 'F' %}badge-red{% else %}badge-green{% endif %}">{{ m.grade }}</span></td>
+          <td>{{ m.exam_date|date:"d M Y" }}</td>
+          <td><form method="post" action="{% url 'mark_delete' m.pk %}">{% csrf_token %}<button class="btn btn-danger btn-sm" type="submit">Delete</button></form></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table></div>
+    {% else %}<div class="empty"><span class="big">📝</span>No marks recorded yet.</div>{% endif %}
+  </div>
+
+  <div class="card">
+    <h2>Add Mark</h2>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+  <div class="alert alert-error">{% for e in form.non_field_errors %}{{ e }} {% endfor %}</div>
+{% endif %}
+{% for field in form %}
+  {% if field.field.widget.input_type == 'checkbox' %}
+    <div class="form-group check">{{ field }} <label for="{{ field.id_for_label }}">{{ field.label }}</label></div>
+  {% else %}
+    <div class="form-group {% if field.name == 'address' or field.name == 'description' %}full{% endif %}">
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      {% if field.help_text %}<small>{{ field.help_text|safe }}</small>{% endif %}
+    </div>
+  {% endif %}
+  {% for e in field.errors %}<div class="error" style="margin-top:-10px;margin-bottom:12px">{{ e }}</div>{% endfor %}
+{% endfor %}
+
+      <button type="submit" class="btn">Add Mark</button>
+    </form>
+  </div>
+</div>
+<a href="{% url 'students_list' %}" class="btn btn-light">&larr; Back to Students</a>
+{% endblock %}
