@@ -1,16 +1,61 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block title %}Confirm Delete{% endblock %}
-{% block heading %}Delete {{ kind|title }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/confirm_delete.css' %}">
+{% endblock %}
+
+{% block page_title %}Delete {{ kind|title }}{% endblock %}
+
 {% block content %}
-<div class="card form-card">
-  <h2>Are you sure you want to delete "{{ object_name }}"?</h2>
-  <p style="color:var(--muted);margin-bottom:18px">{{ warning }} This action cannot be undone.</p>
-  <form method="post">
-    {% csrf_token %}
-    <div class="form-actions">
-      <button type="submit" class="btn btn-danger">Yes, Delete</button>
-      <a href="{{ cancel_url }}" class="btn btn-light">Cancel</a>
+
+<div class="delete-page">
+
+    <div class="delete-card">
+
+        <div class="delete-icon">
+            <span>!</span>
+        </div>
+
+        <h2>Are you sure?</h2>
+
+        <p class="delete-question">
+            You are about to delete
+            <strong>"{{ object_name }}"</strong>.
+        </p>
+
+        <div class="warning-box">
+            <span class="warning-icon">⚠</span>
+            <p>
+                {{ warning }}
+                This action cannot be undone.
+            </p>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="delete-actions">
+
+                <button type="submit" class="btn btn-danger">
+                    <span>Yes, Delete</span>
+                </button>
+
+                <a href="{{ cancel_url }}" class="btn btn-light">
+                    Cancel
+                </a>
+
+            </div>
+        </form>
+
+        <p class="safe-message">
+            Don't worry, you can go back without deleting anything.
+        </p>
+
     </div>
-  </form>
+
 </div>
+
 {% endblock %}

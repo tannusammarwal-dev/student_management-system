@@ -2,50 +2,192 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Student{% endblock %}
-{% block heading %}Students{% endblock %}
+{% block title %}Students{% endblock %}
+{% block page_title %}Students{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/student_list.css' %}">
+{% endblock %}
 
 {% block content %}
-<div class="card">
-  <div class="card-head">
-    <form method="get" class="filters">
-      <input type="text" name="q" value="{{ q }}" placeholder="Search name, roll, email..." class="form-control">
-      <select name="course" class="form-control">
-        <option value="">All courses</option>
-        {% for c in courses %}<option value="{{ c.pk }}" {% if course_id == c.pk|stringformat:"s" %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
-      </select>
-      <select name="status" class="form-control">
-        <option value="">Any status</option>
-        <option value="active" {% if status == 'active' %}selected{% endif %}>Active</option>
-        <option value="inactive" {% if status == 'inactive' %}selected{% endif %}>Inactive</option>
-      </select>
-      <button class="btn btn-light btn-sm" type="submit">Filter</button>
-      {% if q or course_id or status %}<a href="{% url 'students_list' %}" class="btn btn-light btn-sm">Clear</a>{% endif %}
-    </form>
-    <a href="{% url 'students_create' %}" class="btn">+ Add Student</a>
-  </div>
-  {% if page_obj %}
-  <div class="table-wrap"><table>
-    <thead><tr><th>Roll No</th><th>Name</th><th>Email</th><th>Course</th><th>Status</th><th>Actions</th></tr></thead>
-    <tbody>
-    {% for s in page_obj %}
-      <tr>
-        <td>{{ s.roll_number }}</td>
-        <td><a href="{{ s.get_absolute_url }}"><strong>{{ s.full_name }}</strong></a></td>
-        <td>{{ s.email }}</td>
-        <td>{{ s.course.name|default:"Unassigned" }}</td>
-        <td>{% if s.is_active %}<span class="badge badge-green">Active</span>{% else %}<span class="badge badge-gray">Inactive</span>{% endif %}</td>
-        <td class="actions">
-          <a class="btn btn-light btn-sm" href="{{ s.get_absolute_url }}">View</a>
-          <a class="btn btn-light btn-sm" href="{% url 'students_edit' s.pk %}">Edit</a>
-          <a class="btn btn-danger btn-sm" href="{% url 'students_delete' s.pk %}">Delete</a>
-        </td>
-      </tr>
-    {% endfor %}
-    </tbody>
-  </table></div>
-  {% else %}
-  <div class="empty"><span class="big">🔍</span>No students found.</div>
-  {% endif %}
+
+<div class="students-page">
+
+    <!-- Page Header -->
+    <div class="students-heading">
+        <div>
+            <h2>All Students</h2>
+            <p>Manage and keep track of your students.</p>
+        </div>
+
+        <a href="{% url 'students_create' %}" class="btn add-student-btn">
+            <span>+</span> Add Student
+        </a>
+    </div>
+
+    <!-- Students Card -->
+    <div class="card students-card">
+
+        <!-- Search and Filters -->
+        <div class="students-toolbar">
+
+            <form method="get" class="filters">
+
+                <div class="search-box">
+                    <span class="search-icon"></span>
+                    <input
+                        type="text"
+                        name="q"
+                        value="{{ q }}"
+                        placeholder="Search name, roll number, email..."
+                        class="form-control"
+                    >
+                </div>
+
+                <select name="course" class="form-control">
+                    <option value="">All Courses</option>
+                    {% for c in courses %}
+                    <option value="{{ c.pk }}"
+                        {% if course_id == c.pk|stringformat:"s" %}selected{% endif %}>
+                        {{ c.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <select name="status" class="form-control">
+                    <option value="">Any Status</option>
+                    <option value="active" {% if status == 'active' %}selected{% endif %}>
+                        Active
+                    </option>
+                    <option value="inactive" {% if status == 'inactive' %}selected{% endif %}>
+                        Inactive
+                    </option>
+                </select>
+
+                <button type="submit" class="btn filter-btn">
+                    Filter
+                </button>
+
+                {% if q or course_id or status %}
+                <a href="{% url 'students_list' %}" class="btn btn-light clear-btn">
+                    Clear
+                </a>
+                {% endif %}
+
+            </form>
+
+        </div>
+
+        <!-- Table -->
+        {% if page_obj %}
+
+        <div class="table-wrap">
+
+            <table class="students-table">
+
+                <thead>
+                    <tr>
+                        <th>ROLL NO.</th>
+                        <th>STUDENT NAME</th>
+                        <th>EMAIL ADDRESS</th>
+                        <th>COURSE</th>
+                        <th>STATUS</th>
+                        <th>ACTIONS</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for s in page_obj %}
+
+                    <tr>
+
+                        <td>
+                            <span class="roll-number">
+                                {{ s.roll_number }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <a href="{{ s.get_absolute_url }}" class="student-name">
+                                <div class="student-avatar">
+                                    {{ s.initials }}
+                                </div>
+                                <strong>{{ s.full_name }}</strong>
+                            </a>
+                        </td>
+
+                        <td class="email-cell">
+                            {{ s.email }}
+                        </td>
+
+                        <td>
+                            <span class="course-name">
+                                {{ s.course.name|default:"Unassigned" }}
+                            </span>
+                        </td>
+
+                        <td>
+                            {% if s.is_active %}
+                            <span class="status-badge active-status">
+                                <span class="status-dot"></span>
+                                Active
+                            </span>
+                            {% else %}
+                            <span class="status-badge inactive-status">
+                                <span class="status-dot"></span>
+                                Inactive
+                            </span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <div class="table-actions">
+
+                                <a href="{{ s.get_absolute_url }}"
+                                   class="action-btn view-btn">
+                                    View
+                                </a>
+
+                                <a href="{% url 'students_edit' s.pk %}"
+                                   class="action-btn edit-btn">
+                                    Edit
+                                </a>
+
+                                <a href="{% url 'students_delete' s.pk %}"
+                                   class="action-btn delete-btn">
+                                    Delete
+                                </a>
+
+                            </div>
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <!-- Empty State -->
+        <div class="empty-state">
+            <div class="empty-icon">🔍</div>
+            <h3>No Students Found</h3>
+            <p>Try changing your search or filter options.</p>
+            <a href="{% url 'students_list' %}" class="btn btn-light">
+                Clear Filters
+            </a>
+        </div>
+
+        {% endif %}
+
+    </div>
+
 </div>
+
 {% endblock %}

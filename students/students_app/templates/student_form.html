@@ -1,29 +1,98 @@
+
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}Student Form | StudentDesk{% endblock %}
+
+{% block page_title %}
+    {% if form.instance.pk %}Edit Student{% else %}Add Student{% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/student_form.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="card form-card">
-  <form method="post" novalidate>
-    {% csrf_token %}
-    {% if form.non_field_errors %}
-  <div class="alert alert-error">{% for e in form.non_field_errors %}{{ e }} {% endfor %}</div>
-{% endif %}
-{% for field in form %}
-  {% if field.field.widget.input_type == 'checkbox' %}
-    <div class="form-group check">{{ field }} <label for="{{ field.id_for_label }}">{{ field.label }}</label></div>
-  {% else %}
-    <div class="form-group {% if field.name == 'address' or field.name == 'description' %}full{% endif %}">
-      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-      {{ field }}
-      {% if field.help_text %}<small>{{ field.help_text|safe }}</small>{% endif %}
+
+<div class="student-form-wrapper">
+
+    <div class="form-heading">
+        <div>
+            <h2>{% if form.instance.pk %}Edit Student{% else %}Add New Student{% endif %}</h2>
+            <p>Enter student information and save the details.</p>
+        </div>
     </div>
-  {% endif %}
-  {% for e in field.errors %}<div class="error" style="margin-top:-10px;margin-bottom:12px">{{ e }}</div>{% endfor %}
-{% endfor %}
-    <div class="form-actions">
-      <button type="submit" class="btn">Save Student</button>
-      <a href="{% url 'students_list' %}" class="btn btn-light">Cancel</a>
+
+    <div class="card student-form-card">
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="form-error">
+                    {% for e in form.non_field_errors %}
+                        {{ e }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="student-form-grid">
+
+                {% for field in form %}
+
+                    {% if field.field.widget.input_type == 'checkbox' %}
+
+                        <div class="form-group checkbox-group">
+                            {{ field }}
+                            <label for="{{ field.id_for_label }}">
+                                {{ field.label }}
+                            </label>
+                        </div>
+
+                    {% else %}
+
+                        <div class="form-group {% if field.name == 'address' or field.name == 'description' %}full-width{% endif %}">
+
+                            <label for="{{ field.id_for_label }}">
+                                {{ field.label }}
+                            </label>
+
+                            {{ field }}
+
+                            {% if field.help_text %}
+                                <small class="help-text">
+                                    {{ field.help_text|safe }}
+                                </small>
+                            {% endif %}
+
+                            {% for e in field.errors %}
+                                <div class="field-error">{{ e }}</div>
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+
+            <div class="form-actions">
+
+                <button type="submit" class="btn save-btn">
+                    Save Student
+                </button>
+
+                <a href="{% url 'students_list' %}" class="btn cancel-btn">
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
     </div>
-  </form>
+
 </div>
+
 {% endblock %}
