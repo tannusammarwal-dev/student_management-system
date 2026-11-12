@@ -109,13 +109,13 @@
     cursor: pointer;
 }
 
-.delete-actions .btn-danger {
+.delete-actions .btn-danger:hover {
     background: #e77575;
     color: #f7eded;
     border: 1px solid #DC2626;
 }
 
-.delete-actions .btn-danger:hover {
+.delete-actions .btn-danger {
     background: #B91C1C;
     border-color: #B91C1C;
 }
