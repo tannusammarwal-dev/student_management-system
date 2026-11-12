@@ -170,7 +170,7 @@ a {
 
 .main {
     margin-left: var(--sidebar-w);
-
+    
     min-height: 100vh;
 
     display: flex;
@@ -183,7 +183,6 @@ a {
     display: flex;
     align-items: center;
     gap: 16px;
-
     padding: 18px 32px;
 
     background: var(--card);
@@ -192,7 +191,7 @@ a {
 
 .page-title {
     margin: 0;
-
+   
     font-size: 1.35rem;
     font-weight: 700;
 
