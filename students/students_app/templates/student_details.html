@@ -1,75 +1,268 @@
+
 {% extends 'base.html' %}
-{% block title %}{{ student.full_name }}{% endblock %}
-{% block heading %}Student Profile{% endblock %}
+
+{% block title %}{{ student.full_name }} | StudentDesk{% endblock %}
+
+{% block page_title %}Student Profile{% endblock %}
+
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/student_details.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="card">
-  <div class="profile-head">
-    <div class="avatar">{{ student.initials }}</div>
-    <div>
-      <h2 style="margin:0">{{ student.full_name }}</h2>
-      <p style="color:var(--muted)">Roll No: {{ student.roll_number }}
-        {% if student.is_active %}<span class="badge badge-green">Active</span>{% else %}<span class="badge badge-gray">Inactive</span>{% endif %}</p>
+
+<!-- Student Profile -->
+<div class="profile-card card">
+
+    <div class="profile-header">
+
+        <div class="profile-info">
+
+            <div class="profile-avatar">
+                {{ student.initials }}
+            </div>
+
+            <div class="profile-text">
+                <h2>{{ student.full_name }}</h2>
+
+                <div class="profile-meta">
+                    <span>Roll No: {{ student.roll_number }}</span>
+
+                    {% if student.is_active %}
+                        <span class="profile-status status-active">Active</span>
+                    {% else %}
+                        <span class="profile-status status-inactive">Inactive</span>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+
+        <div class="profile-actions">
+            <a class="profile-btn edit-btn"
+               href="{% url 'students_edit' student.pk %}">
+                Edit Student
+            </a>
+
+            <a class="profile-btn delete-btn"
+               href="{% url 'students_delete' student.pk %}">
+                Delete
+            </a>
+        </div>
+
     </div>
-    <div class="actions" style="margin-left:auto">
-      <a class="btn btn-light" href="{% url 'students_edit' student.pk %}">Edit</a>
-      <a class="btn btn-danger" href="{% url 'students_delete' student.pk %}">Delete</a>
+
+    <div class="profile-divider"></div>
+
+    <div class="detail-grid">
+
+        <div class="detail-item">
+            <span>Email</span>
+            <strong>{{ student.email }}</strong>
+        </div>
+
+        <div class="detail-item">
+            <span>Phone</span>
+            <strong>{{ student.phone|default:"--" }}</strong>
+        </div>
+
+        <div class="detail-item">
+            <span>Gender</span>
+            <strong>{{ student.get_gender_display }}</strong>
+        </div>
+
+        <div class="detail-item">
+            <span>Date of Birth</span>
+            <strong>{{ student.date_of_birth|date:"d M Y"|default:"--" }}</strong>
+        </div>
+
+        <div class="detail-item">
+            <span>Course</span>
+            <strong>{{ student.course.name|default:"Unassigned" }}</strong>
+        </div>
+
+        <div class="detail-item">
+            <span>Admission Date</span>
+            <strong>{{ student.admission_date|date:"d M Y"|default:"--" }}</strong>
+        </div>
+
+        <div class="detail-item full-detail">
+            <span>Address</span>
+            <strong>{{ student.address|default:"--" }}</strong>
+        </div>
+
+        <div class="detail-item score-detail">
+            <span>Average Score</span>
+            <strong>
+                {% if average is not None %}
+                    {{ average|floatformat:1 }}%
+                {% else %}
+                    --
+                {% endif %}
+            </strong>
+        </div>
+
     </div>
-  </div>
-  <div class="detail-grid">
-    <div class="detail-item"><small>Email</small><strong>{{ student.email }}</strong></div>
-    <div class="detail-item"><small>Phone</small><strong>{{ student.phone|default:"--" }}</strong></div>
-    <div class="detail-item"><small>Gender</small><strong>{{ student.get_gender_display }}</strong></div>
-    <div class="detail-item"><small>Date of Birth</small><strong>{{ student.date_of_birth|date:"d M Y"|default:"--" }}</strong></div>
-    <div class="detail-item"><small>Course</small><strong>{{ student.course.name|default:"Unassigned" }}</strong></div>
-    <div class="detail-item"><small>Admission Date</small><strong>{{ student.admission_date|date:"d M Y" }}</strong></div>
-    <div class="detail-item"><small>Address</small><strong>{{ student.address|default:"--" }}</strong></div>
-    <div class="detail-item"><small>Average Score</small><strong>{% if average is not None %}{{ average|floatformat:1 }}%{% else %}--{% endif %}</strong></div>
-  </div>
+
 </div>
 
-<div class="two-col">
-  <div class="card">
-    <h2>Marks</h2>
-    {% if marks %}
-    <div class="table-wrap"><table>
-      <thead><tr><th>Subject</th><th>Score</th><th>Grade</th><th>Date</th><th></th></tr></thead>
-      <tbody>
-      {% for m in marks %}
-        <tr>
-          <td>{{ m.subject }}</td><td>{{ m.score }}/100</td>
-          <td><span class="badge {% if m.grade == 'F' %}badge-red{% else %}badge-green{% endif %}">{{ m.grade }}</span></td>
-          <td>{{ m.exam_date|date:"d M Y" }}</td>
-          <td><form method="post" action="{% url 'mark_delete' m.pk %}">{% csrf_token %}<button class="btn btn-danger btn-sm" type="submit">Delete</button></form></td>
-        </tr>
-      {% endfor %}
-      </tbody>
-    </table></div>
-    {% else %}<div class="empty"><span class="big">📝</span>No marks recorded yet.</div>{% endif %}
-  </div>
 
-  <div class="card">
-    <h2>Add Mark</h2>
-    <form method="post" novalidate>
-      {% csrf_token %}
-      {% if form.non_field_errors %}
-  <div class="alert alert-error">{% for e in form.non_field_errors %}{{ e }} {% endfor %}</div>
-{% endif %}
-{% for field in form %}
-  {% if field.field.widget.input_type == 'checkbox' %}
-    <div class="form-group check">{{ field }} <label for="{{ field.id_for_label }}">{{ field.label }}</label></div>
-  {% else %}
-    <div class="form-group {% if field.name == 'address' or field.name == 'description' %}full{% endif %}">
-      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-      {{ field }}
-      {% if field.help_text %}<small>{{ field.help_text|safe }}</small>{% endif %}
+<!-- Marks and Add Mark Section -->
+<div class="profile-bottom-grid">
+
+    <!-- Marks Table -->
+    <div class="card marks-card">
+
+        <div class="section-heading">
+            <div>
+                <h2>Academic Marks</h2>
+                <p>Student examination performance</p>
+            </div>
+
+            <span class="section-icon">▤</span>
+        </div>
+
+        {% if marks %}
+
+            <div class="table-wrap">
+                <table class="marks-table">
+
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Score</th>
+                            <th>Grade</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for m in marks %}
+                        <tr>
+
+                            <td class="subject-name">{{ m.subject }}</td>
+
+                            <td>{{ m.score }}/100</td>
+
+                            <td>
+                                <span class="grade-badge
+                                    {% if m.grade == 'F' %}grade-fail
+                                    {% else %}grade-pass{% endif %}">
+                                    {{ m.grade }}
+                                </span>
+                            </td>
+
+                            <td>{{ m.exam_date|date:"d M Y" }}</td>
+
+                            <td>
+                                <form method="post"
+                                      action="{% url 'mark_delete' m.pk %}">
+                                    {% csrf_token %}
+
+                                    <button type="submit"
+                                            class="table-delete-btn">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+
+        {% else %}
+
+            <div class="empty-marks">
+                <div class="empty-icon">▤</div>
+                <h3>No marks recorded</h3>
+                <p>Marks added for this student will appear here.</p>
+            </div>
+
+        {% endif %}
+
     </div>
-  {% endif %}
-  {% for e in field.errors %}<div class="error" style="margin-top:-10px;margin-bottom:12px">{{ e }}</div>{% endfor %}
-{% endfor %}
 
-      <button type="submit" class="btn">Add Mark</button>
-    </form>
-  </div>
+
+    <!-- Add Mark Form -->
+    <div class="card add-mark-card">
+
+        <div class="section-heading">
+            <div>
+                <h2>Add Mark</h2>
+                <p>Record a new examination result</p>
+            </div>
+
+            <span class="section-icon">+</span>
+        </div>
+
+        <form method="post" novalidate>
+
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="form-error">
+                    {% for e in form.non_field_errors %}
+                        {{ e }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% for field in form %}
+
+                {% if field.field.widget.input_type == 'checkbox' %}
+
+                    <div class="mark-checkbox">
+                        {{ field }}
+                        <label for="{{ field.id_for_label }}">
+                            {{ field.label }}
+                        </label>
+                    </div>
+
+                {% else %}
+
+                    <div class="mark-form-group">
+
+                        <label for="{{ field.id_for_label }}">
+                            {{ field.label }}
+                        </label>
+
+                        {{ field }}
+
+                        {% if field.help_text %}
+                            <small>{{ field.help_text|safe }}</small>
+                        {% endif %}
+
+                        {% for e in field.errors %}
+                            <div class="field-error">{{ e }}</div>
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+            {% endfor %}
+
+            <button type="submit" class="add-mark-btn">
+                + Add Mark
+            </button>
+
+        </form>
+
+    </div>
+
 </div>
-<a href="{% url 'students_list' %}" class="btn btn-light">&larr; Back to Students</a>
+
+
+<!-- Back Button -->
+<div class="back-section">
+    <a href="{% url 'students_list' %}" class="back-btn">
+        ← Back to Students
+    </a>
+</div>
+
 {% endblock %}

@@ -1,14 +1,56 @@
-  const menuBtn = document.getElementById('menuBtn');
-  const closeBtn = document.getElementById('closeBtn');
-  const sidebar = document.getElementById('sidebar');
 
-  menuBtn.addEventListener('click', () => sidebar.classList.add('open'));
-  closeBtn.addEventListener('click', () => sidebar.classList.remove('open'));
+document.addEventListener('DOMContentLoaded', function () {
 
-  // Close when a nav link is clicked, or when Esc is pressed
-  sidebar.querySelectorAll('.nav-link').forEach(link =>
-    link.addEventListener('click', () => sidebar.classList.remove('open'))
-  );
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') sidebar.classList.remove('open');
-  });
+    // Mobile Sidebar
+    const menuBtn = document.getElementById('menuBtn');
+    const closeBtn = document.getElementById('closeBtn');
+    const sidebar = document.getElementById('sidebar');
+
+    if (menuBtn && sidebar) {
+        menuBtn.addEventListener('click', () => {
+            sidebar.classList.add('open');
+        });
+    }
+
+    if (closeBtn && sidebar) {
+        closeBtn.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+        });
+    }
+
+    if (sidebar) {
+        sidebar.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                sidebar.classList.remove('open');
+            });
+        });
+    }
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && sidebar) {
+            sidebar.classList.remove('open');
+        }
+    });
+
+
+    // Success Message Auto Hide
+    const messages = document.querySelectorAll('.auto-dismiss');
+
+    messages.forEach(message => {
+
+        if (message.classList.contains('alert-success')) {
+
+            setTimeout(() => {
+                message.classList.add('hide-message');
+
+                setTimeout(() => {
+                    message.remove();
+                }, 500);
+
+            }, 3000);
+
+        }
+
+    });
+
+});

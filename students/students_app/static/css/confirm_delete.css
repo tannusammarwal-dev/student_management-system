@@ -1,0 +1,151 @@
+/* Delete Page */
+
+.delete-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 35px 15px;
+    min-height: 65vh;
+}
+
+/* Delete Card */
+
+.delete-card {
+    width: 100%;
+    max-width: 520px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 38px 35px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(76, 29, 149, 0.07);
+}
+
+/* Warning Icon */
+
+.delete-icon {
+    width: 75px;
+    height: 75px;
+    margin: 0 auto 22px;
+    border-radius: 50%;
+    background: #FEE2E2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.delete-icon span {
+    font-size: 38px;
+    font-weight: 700;
+    color: #DC2626;
+}
+
+/* Heading */
+
+.delete-card h2 {
+    font-size: 25px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 12px;
+}
+
+.delete-question {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--muted);
+    margin-bottom: 22px;
+    overflow-wrap: anywhere;
+}
+
+.delete-question strong {
+    color: var(--text);
+    font-weight: 700;
+}
+
+/* Warning Box */
+
+.warning-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    text-align: left;
+    padding: 15px;
+    margin-bottom: 25px;
+    background: #FFF7ED;
+    border: 1px solid #FED7AA;
+    border-radius: 10px;
+}
+
+.warning-icon {
+    font-size: 19px;
+    color: #EA580C;
+    flex-shrink: 0;
+}
+
+.warning-box p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #9A3412;
+    margin: 0;
+}
+
+/* Action Buttons */
+
+.delete-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.delete-actions .btn {
+    min-width: 125px;
+    justify-content: center;
+    text-align: center;
+    padding: 11px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.delete-actions .btn-danger {
+    background: #e77575;
+    color: #f7eded;
+    border: 1px solid #DC2626;
+}
+
+.delete-actions .btn-danger:hover {
+    background: #B91C1C;
+    border-color: #B91C1C;
+}
+
+/* Bottom Message */
+
+.safe-message {
+    margin-top: 25px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+/* Responsive */
+
+@media (max-width: 500px) {
+
+    .delete-card {
+        padding: 28px 20px;
+    }
+
+    .delete-card h2 {
+        font-size: 22px;
+    }
+
+    .delete-actions {
+        flex-direction: column;
+    }
+
+    .delete-actions .btn {
+        width: 100%;
+    }
+
+}
