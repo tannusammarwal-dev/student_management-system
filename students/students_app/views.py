@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.urls import reverse
 from .models import Course, Student, Mark
-from .forms import  RegisterForm , LoginForm, StudentForm, StudentForm  
+from .forms import  CourseForm, RegisterForm , LoginForm, StudentForm, StudentForm  
 from django.core.paginator import Paginator
 from django.db.models import Avg, Count, Q  
 
@@ -181,17 +181,45 @@ def courses_list(request):
          
 @login_required(login_url='login')
 def courses_create(request):
-    return render(request,"courses/courses_create.html")
+    form = CourseForm(request.POST or None, user=request.user)
+    if request.method == 'POST' and form.is_valid():
+        course = form.save(commit=False)
+        course.owner = request.user
+        course.save()
+        messages.success(request, f'Course "{course.name}" added.')
+        return redirect('courses_list')
+    return render(request, 'course_form.html', {'form': form, 'title': 'Add Course'})
+
+   
 
 
 @login_required(login_url='login')
 def courses_edit(request, pk):
-    return render(request,"courses/courses_edit.html")  
+    course = get_object_or_404(Course, pk=pk, owner=request.user)
+    form = CourseForm(request.POST or None, instance=course, user=request.user)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, f'Course "{course.name}" updated.')
+        return redirect('courses_list')
+    return render(request, 'course_form.html', {'form': form, 'title': 'Edit Course'})
+
+    
+    
 
 
 @login_required(login_url='login')
 def courses_delete(request, pk):
-    return render(request,"courses/courses_delete.html")
+    course = get_object_or_404(Course, pk=pk, owner=request.user)
+    if request.method == 'POST':
+            name = course.name
+            course.delete()
+            messages.success(request, f'Course "{name}" deleted. Its students are now unassigned.')
+            return redirect('courses_list')
+    return render(request, 'confirm_delete.html', {
+            'object_name': course.name, 'kind': 'course',
+            'cancel_url': reverse('courses_list'),
+            'warning': 'Students in this course will not be deleted; they will become unassigned.',
+        })
 
 
 # marks
