@@ -361,19 +361,18 @@ a {
         transform 0.15s ease,
         box-shadow 0.2s ease;
 }
+
 .logout-btn{
-    color: #FFFFFF;
-    margin-left: 20px;
-    font-weight: 600;
-    
-}
-.logout-btn:hover{
     background: white;
     border-radius: 8px;
     color: purple;
     padding: 9px 10px;
     font-weight: 600;
   
+}
+.logout-btn:hover{
+    
+    color:#7c3aed;
 }
 
 .btn:hover {

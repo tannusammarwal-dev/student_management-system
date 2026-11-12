@@ -57,6 +57,7 @@ def login_user(request):
         request, 'login.html', {'form': form}
     )
 
+
 def logout_user(request):
     logout(request)
     messages.success(request,"you have been logged out")
@@ -90,6 +91,7 @@ def dashboard(request):
 
 
 # Student Management
+@login_required(login_url='login')
 def students_list(request):
     q = request.GET.get('q', '').strip()
     course_id = request.GET.get('course', '').strip()
@@ -117,8 +119,9 @@ def students_list(request):
         'q': q, 'course_id': course_id, 'status': status,
         'querystring': params.urlencode(),
     })
-    
 
+    
+@login_required(login_url='login')
 def students_create(request):
     form = StudentForm(request.POST or None, user=request.user)
     if request.method == 'POST' and form.is_valid():
@@ -129,6 +132,8 @@ def students_create(request):
         return redirect('student_detail', pk=student.pk)
     return render(request, 'student_form.html', {'form': form, 'title': 'Add Student'})
 
+
+@login_required(login_url='login')
 def student_details(request, pk):
      student = get_object_or_404(
         Student,
@@ -138,7 +143,7 @@ def student_details(request, pk):
      return render(request, "student_details.html", {'student': student})
 
     
-
+@login_required(login_url='login')
 def students_edit(request, pk):
     student = get_object_or_404(Student, pk=pk, owner=request.user)
     form = StudentForm(request.POST or None, instance=student, user=request.user)
@@ -148,6 +153,8 @@ def students_edit(request, pk):
         return redirect('student_detail', pk=student.pk)
     return render(request, 'student_form.html', {'form': form, 'title': 'Edit Student'})
 
+
+@login_required(login_url='login')
 def students_delete(request, pk):
     student = get_object_or_404(Student, pk=pk, owner=request.user)
     if request.method == 'POST':
@@ -163,6 +170,7 @@ def students_delete(request, pk):
 
 
 # course
+@login_required(login_url='login')
 def courses_list(request):
     q = request.GET.get('q', '').strip()
     courses = Course.objects.filter(owner=request.user).annotate(student_count=Count('students'))
@@ -171,17 +179,22 @@ def courses_list(request):
     return render(request, 'course_list.html', {'courses': courses, 'q': q})
      
          
-
+@login_required(login_url='login')
 def courses_create(request):
     return render(request,"courses/courses_create.html")
 
+
+@login_required(login_url='login')
 def courses_edit(request, pk):
     return render(request,"courses/courses_edit.html")  
 
+
+@login_required(login_url='login')
 def courses_delete(request, pk):
     return render(request,"courses/courses_delete.html")
 
 
 # marks
+@login_required(login_url='login')
 def marks_delete(request):
     return render(request,"marks/marks_delete.html")
