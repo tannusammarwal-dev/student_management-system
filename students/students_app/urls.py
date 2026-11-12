@@ -24,5 +24,6 @@ urlpatterns = [
    path("courses/<int:pk>/delete",views.courses_delete,name='courses_delete'),
 
    # Marks
-   path("marks",views.marks_delete,name='marks_delete'),
+
+   path("marks/<int:pk>/delete",views.marks_delete,name='marks_delete'),
 ]

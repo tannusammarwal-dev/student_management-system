@@ -101,3 +101,5 @@ class MarkForm(forms.ModelForm):
     class Meta:
         model = Mark
         fields = ['subject', 'score', 'exam_date']
+        widgets = {'exam_date': forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'})}
+
