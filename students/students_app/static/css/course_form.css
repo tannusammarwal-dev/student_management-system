@@ -1,0 +1,259 @@
+
+/* ==============================
+   COURSE FORM PAGE
+============================== */
+
+.course-form-page {
+    width: 100%;
+    max-width: 850px;
+    margin: 0 auto;
+}
+
+/* Page Heading */
+
+.form-heading {
+    margin-bottom: 22px;
+}
+
+.form-heading h2 {
+    font-size: 21px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+}
+
+.form-heading p {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0;
+}
+
+/* Main Form Card */
+
+.course-form-card {
+    padding: 28px;
+    border-radius: 14px;
+}
+
+/* Card Header */
+
+.form-card-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-bottom: 22px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--line);
+}
+
+.form-header-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #F0EAFE;
+    border-radius: 12px;
+    font-size: 23px;
+}
+
+.form-card-header h3 {
+    font-size: 16px;
+    color: var(--text);
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.form-card-header p {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0;
+}
+
+/* Form Fields Layout */
+
+.course-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.form-group.full {
+    grid-column: 1 / -1;
+}
+
+/* Labels */
+
+.form-group label {
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.required-star {
+    color: #DC2626;
+    margin-left: 3px;
+}
+
+/* Inputs */
+
+.course-form-card input:not([type="checkbox"]),
+.course-form-card select,
+.course-form-card textarea {
+    width: 100%;
+    min-height: 44px;
+    padding: 11px 13px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #FFFFFF;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 12px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.course-form-card textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+.course-form-card input:focus,
+.course-form-card select:focus,
+.course-form-card textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.09);
+}
+
+.course-form-card input::placeholder,
+.course-form-card textarea::placeholder {
+    color: #A89CBD;
+}
+
+/* Help Text */
+
+.help-text {
+    margin-top: 7px;
+    font-size: 11px;
+    line-height: 1.5;
+    color: var(--muted);
+}
+
+/* Checkbox */
+
+.checkbox-group {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: #FAF8FF;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+}
+
+.checkbox-group input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+
+.checkbox-group label {
+    margin: 0;
+    cursor: pointer;
+}
+
+/* Validation Errors */
+
+.form-error-box {
+    padding: 13px 15px;
+    margin-bottom: 20px;
+    background: #FEF2F2;
+    border: 1px solid #FECACA;
+    border-left: 4px solid #DC2626;
+    border-radius: 8px;
+    color: #B91C1C;
+    font-size: 12px;
+}
+
+.form-error-box p {
+    margin: 3px 0;
+}
+
+.field-error {
+    color: #DC2626;
+    font-size: 11px;
+    margin-top: 7px;
+}
+
+/* Form Buttons */
+
+.form-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-top: 24px;
+    margin-top: 25px;
+    border-top: 1px solid var(--line);
+}
+
+.save-course-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 145px;
+    padding: 11px 18px;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.save-course-btn span {
+    font-size: 15px;
+}
+
+.cancel-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 100px;
+    padding: 11px 18px;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+/* Responsive */
+
+@media (max-width: 600px) {
+
+    .course-form-card {
+        padding: 20px 16px;
+    }
+
+    .course-fields {
+        grid-template-columns: 1fr;
+        gap: 17px;
+    }
+
+    .form-group.full {
+        grid-column: auto;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .save-course-btn,
+    .cancel-btn {
+        width: 100%;
+    }
+
+}

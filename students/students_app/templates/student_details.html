@@ -158,7 +158,7 @@
 
                             <td>
                                 <form method="post"
-                                      action="{% url 'mark_delete' m.pk %}">
+                                      action="{% url 'marks_delete' m.pk %}">
                                     {% csrf_token %}
 
                                     <button type="submit"
@@ -266,3 +266,5 @@
 </div>
 
 {% endblock %}
+
+

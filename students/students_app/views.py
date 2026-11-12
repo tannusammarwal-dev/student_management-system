@@ -6,9 +6,9 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from django.urls import reverse
+from django.views.decorators.http import require_POST
 from .models import Course, Student, Mark
-from .forms import  CourseForm, RegisterForm , LoginForm, StudentForm, StudentForm  
+from .forms import  CourseForm, MarkForm, RegisterForm , LoginForm, StudentForm, StudentForm  
 from django.core.paginator import Paginator
 from django.db.models import Avg, Count, Q  
 
@@ -134,12 +134,19 @@ def students_create(request):
 
 @login_required(login_url='login')
 def student_details(request, pk):
-     student = get_object_or_404(
-        Student,
-        pk=pk,
-        owner=request.user)
-
-     return render(request, "student_details.html", {'student': student})
+    student = get_object_or_404(Student.objects.select_related('course'), pk=pk, owner=request.user)
+    mark_form = MarkForm(request.POST or None)
+    if request.method == 'POST' and mark_form.is_valid():
+        mark = mark_form.save(commit=False)
+        mark.student = student
+        mark.save()
+        messages.success(request, 'Mark added.')
+        return redirect('student_detail', pk=student.pk)
+    marks = student.marks.all()
+    return render(request, 'student_details.html', {
+        'student': student, 'marks': marks, 'form': mark_form,
+        'average': marks.aggregate(a=Avg('score'))['a'],
+    })
 
     
 @login_required(login_url='login')
@@ -195,33 +202,40 @@ def courses_create(request):
 @login_required(login_url='login')
 def courses_edit(request, pk):
     course = get_object_or_404(Course, pk=pk, owner=request.user)
-    form = CourseForm(request.POST or None, instance=course, user=request.user)
-    if request.method == 'POST' and form.is_valid():
-        form.save()
-        messages.success(request, f'Course "{course.name}" updated.')
-        return redirect('courses_list')
-    return render(request, 'course_form.html', {'form': form, 'title': 'Edit Course'})
-
+    if request.method == 'POST':
+        name = course.name
+        course.delete()
+        messages.success(request, f'Course "{name}" deleted. Its students are now unassigned.')
+        return redirect('course_list')
+    return render(request, 'students/confirm_delete.html', {
+        'object_name': course.name, 'kind': 'course',
+        'cancel_url': reverse('course_list'),
+        'warning': 'Students in this course will not be deleted; they will become unassigned.',
+    })
     
-    
 
 
-@login_required(login_url='login')
+@login_required
 def courses_delete(request, pk):
     course = get_object_or_404(Course, pk=pk, owner=request.user)
     if request.method == 'POST':
-            name = course.name
-            course.delete()
-            messages.success(request, f'Course "{name}" deleted. Its students are now unassigned.')
-            return redirect('courses_list')
+        name = course.name
+        course.delete()
+        messages.success(request, f'Course "{name}" deleted. Its students are now unassigned.')
+        return redirect('courses_list')
     return render(request, 'confirm_delete.html', {
-            'object_name': course.name, 'kind': 'course',
-            'cancel_url': reverse('courses_list'),
-            'warning': 'Students in this course will not be deleted; they will become unassigned.',
-        })
+        'object_name': course.name, 'kind': 'course',
+        'cancel_url': reverse('courses_list'),
+        'warning': 'Students in this course will not be deleted; they will become unassigned.',
+    })
 
 
 # marks
-@login_required(login_url='login')
-def marks_delete(request):
-    return render(request,"marks/marks_delete.html")
+@login_required
+@require_POST
+def marks_delete(request, pk):
+    mark = get_object_or_404(Mark, pk=pk, student__owner=request.user)
+    student_pk = mark.student_id
+    mark.delete()
+    messages.success(request, 'Mark deleted.')
+    return redirect('student_detail', pk=student_pk)
