@@ -24,9 +24,8 @@ def register_user(request):
         form =  RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
-            auth_login(request, user)
             messages.success(request,'register sucessfull 👍!')
-            return redirect('login.html')
+            return redirect('login')
 
         else:
             messages.error(request,"registration failed please try again!")

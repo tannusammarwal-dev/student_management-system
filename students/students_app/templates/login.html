@@ -10,12 +10,26 @@
     <title>Login | EduManage</title>
 
     <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 
 <body>
+{% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+
+            {% if message.tags == 'success' %}
+                <div class="alert alert-success auto-dismiss">
+                    <i class="fas fa-check-circle"></i> {{ message }}
+                </div>
+            {% endif %}
+
+        {% endfor %}
+    </div>
+{% endif %}
 
 <div class="auth-container">
 
@@ -100,6 +114,7 @@
 </div>
 
 <script src="{% static 'js/register.js' %}"></script>
+<script src="{% static 'js/base.js' %}"></script>
 
 </body>
 </html>

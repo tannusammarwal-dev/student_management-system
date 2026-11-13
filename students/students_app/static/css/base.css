@@ -200,9 +200,17 @@ a {
 
 .topbar-actions {
     margin-left: auto;
-
     display: flex;
     gap: 10px;
+    background: #29243d;
+    color: #f3f4f6;
+    padding: 9px 16px;
+    border-radius: 10px;
+    transition: 0.3s ease;
+}
+
+.topbar-actions:hover {
+    background: #40365c;
 }
 
 /* Main Content Area */
@@ -448,6 +456,90 @@ a {
     pointer-events: none;
 }
 
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* User Profile */
+.user_name {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 8px 10px;
+    margin-left: -15px;
+    border-radius: 14px;
+
+    background: #29243d;
+    border: 1px solid #40365c;
+
+    color: #f3f4f6;
+    font-size: 14px;
+    font-weight: 600;
+
+    white-space: nowrap;
+    transition: 0.3s ease;
+}
+
+.user_name:hover {
+    background: #352d50;
+    border-color: #8b5cf6;
+}
+
+.user-avatar {
+    font-size: 17px;
+}
+
+/* Logout Button */
+.logout-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    padding: 10px 16px;
+    border-radius: 12px;
+
+    background: rgba(239, 68, 68, 0.10);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+
+    color: #f87171;
+    font-size: 13px;
+    font-weight: 600;
+
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+    background: #ef4444;
+    border-color: #ef4444;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(239, 68, 68, 0.2);
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .user-actions {
+        gap: 7px;
+    }
+
+    .user_name {
+        padding: 8px 11px;
+        font-size: 12px;
+        gap: 6px;
+    }
+
+    .logout-btn {
+        padding: 8px 11px;
+        font-size: 12px;
+    }
+}
+
 /* ==============================
    RESPONSIVE DESIGN
 ============================== */
@@ -513,3 +605,5 @@ a {
         transition: none !important;
     }
 }
+
+

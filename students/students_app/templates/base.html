@@ -43,10 +43,16 @@
     </nav>
 
     <div class="sidebar-footer">
-        <span class="user_name">👋{{ user.get_full_name|default:user.username }}</span>
-         <form method="post" action="{% url 'logout' %}">{% csrf_token %}
-          <button type="submit" class="logout-btn">🚪 Logout</button>
-        </form>
+        <div class="user-actions">
+          <span class="user_name">
+              <span class="user-avatar">👋</span>
+              <span>{{ user.get_full_name|default:user.username }}</span>
+          </span>
+
+            <form method="post" action="{% url 'logout' %}">{% csrf_token %}
+                <button type="submit" class="logout-btn">🚪 Logout</button>
+            </form>
+        </div>
     </div>
   </aside>
 

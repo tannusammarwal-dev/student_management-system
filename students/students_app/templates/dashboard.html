@@ -137,7 +137,7 @@
                     <p class="card-subtitle">Course-wise student distribution</p>
                 </div>
 
-                <a href="#" class="btn btn-light btn-sm">Manage</a>
+                <a href="{% url 'students_list' %}" class="btn btn-light btn-sm">Manage</a>
             </div>
 
             {% for c in course_stats %}
@@ -161,7 +161,7 @@
                 <span class="empty-icon">📚</span>
                 <h3>No courses yet</h3>
                 <p>Add courses to see student distribution.</p>
-                <a href="#" class="empty-link">Add a course</a>
+                <a href="{% url 'courses_create' %}" class="empty-link">Add a course</a>
             </div>
 
             {% endfor %}
