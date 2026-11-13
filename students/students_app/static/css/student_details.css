@@ -118,13 +118,14 @@
     background: #ad9fea;
 }
 
-.delete-btn {
-    background: #FEF2F2;
-    color: #DC2626;
+.delete-btn{
+    background: #f28585;
+    color: #feeaea;
 }
 
-.delete-btn:hover {
-    background: #FEE2E2;
+.delete-btn:hover{
+    background: #f70404;
+    color:white
 }
 
 /* Divider */

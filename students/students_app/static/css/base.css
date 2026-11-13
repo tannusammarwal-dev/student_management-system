@@ -365,14 +365,14 @@ a {
 .logout-btn{
     background: white;
     border-radius: 8px;
-    color: purple;
+    color: rgb(246, 40, 40);
     padding: 9px 10px;
     font-weight: 600;
   
 }
 .logout-btn:hover{
     
-    color:#7c3aed;
+    color:#e5221b;
 }
 
 .btn:hover {
