@@ -25,7 +25,10 @@ SECRET_KEY = 'django-insecure-9$79gs7p+4!ih!)=3yjg3h8_fm$o^78=$x+pb^(en00viq7b9c
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['student-management-system-vw3f.onrender.com']
+ALLOWED_HOSTS = [ 'student-management-system-vw3f.onrender.com', 'localhost', '127.0.0.1']
+CSRF_TRUSTED_ORIGINS = [
+    'https://your-app-name.onrender.com',
+]
 
 
 # Application definition
