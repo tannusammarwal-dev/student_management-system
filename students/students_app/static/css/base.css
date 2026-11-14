@@ -202,7 +202,7 @@ a {
     margin-left: auto;
     display: flex;
     gap: 10px;
-    background: #29243d;
+    background: #9208f5;
     color: #f3f4f6;
     padding: 9px 16px;
     border-radius: 10px;
@@ -210,7 +210,7 @@ a {
 }
 
 .topbar-actions:hover {
-    background: #40365c;
+    background: #c173f9;
 }
 
 /* Main Content Area */
@@ -472,7 +472,7 @@ a {
     margin-left: -15px;
     border-radius: 14px;
 
-    background: #29243d;
+    background: #9208f5;
     border: 1px solid #40365c;
 
     color: #f3f4f6;
@@ -484,7 +484,7 @@ a {
 }
 
 .user_name:hover {
-    background: #352d50;
+    background: #bd76ef;
     border-color: #8b5cf6;
 }
 
